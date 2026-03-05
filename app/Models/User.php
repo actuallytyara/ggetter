@@ -23,6 +23,11 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function goals()
+    {
+    return $this->hasMany(Goal::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
