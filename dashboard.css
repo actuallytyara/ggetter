@@ -1,0 +1,194 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#eef0ea;
+}
+
+header{
+background:#a8c06a;
+padding:15px 25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo img{
+    width:40px;
+    height:40px;
+    object-fit:contain;
+}
+
+.header-icons{
+display:flex;
+gap:15px;
+}
+
+.container{
+padding:20px;
+max-width:1200px;
+margin:auto;
+}
+
+.today{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+.today h3{
+margin-bottom:10px;
+}
+
+.today ul{
+list-style:none;
+}
+
+.today li{
+padding:10px 0;
+}
+
+.top-cards{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+}
+
+.banner img{
+width:100%;
+height:250px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+.promo{
+background:white;
+border-radius:15px;
+padding:25px;
+margin-bottom:20px;
+}
+
+.promo button{
+margin-top:10px;
+padding:10px 20px;
+border:none;
+border-radius:25px;
+background:#a8c06a;
+cursor:pointer;
+}
+
+.dashboard-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.habit-card,
+.progress-card,
+.goal-card,
+.score-card{
+background:white;
+padding:25px;
+border-radius:15px;
+}
+
+.habit{
+display:flex;
+justify-content:space-between;
+padding:10px 0;
+}
+
+.bar{
+height:20px;
+background:#ddd;
+border-radius:20px;
+margin-bottom:15px;
+overflow:hidden;
+}
+
+.fill{
+height:100%;
+background:#a8c06a;
+width:0;
+transition:2s;
+}
+
+.fill1{
+width:70%;
+}
+
+.fill2{
+width:85%;
+}
+
+.fill3{
+width:60%;
+}
+
+.fill4{
+width:90%;
+}
+
+.goal-card ul{
+list-style:none;
+}
+
+.goal-card li{
+padding:12px 0;
+display:flex;
+justify-content:space-between;
+}
+
+.circle{
+width:180px;
+height:180px;
+border-radius:50%;
+border:15px solid #a8c06a;
+display:flex;
+justify-content:center;
+align-items:center;
+margin:auto;
+font-size:32px;
+font-weight:700;
+}
+
+.quote{
+background:white;
+margin-top:20px;
+padding:30px;
+border-radius:15px;
+text-align:center;
+}
+
+.quote p{
+font-size:20px;
+margin:15px 0;
+font-style:italic;
+}
+
+@media(max-width:768px){
+
+.top-cards,
+.dashboard-grid{
+grid-template-columns:1fr;
+}
+
+.circle{
+width:140px;
+height:140px;
+}
+
+}
