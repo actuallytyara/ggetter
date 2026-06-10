@@ -38,7 +38,7 @@
 
 <div class="mx-6 my-6 grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
     <div class="bg-white p-6 rounded-3xl shadow-sm">
-        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">🎯 Add New Goal Space</h3>
+        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">[GOAL] Add New Goal Space</h3>
         <form action="{{ route('goals.store') }}" method="POST" class="space-y-3">
             @csrf
             <input type="text" name="title" required class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="Goal Title (e.g., Learn Laravel)">
@@ -55,7 +55,7 @@
     </div>
 
     <div class="bg-white p-6 rounded-3xl shadow-sm">
-        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">👤 Add New Member</h3>
+        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">[USER] Add New Member</h3>
         <form action="{{ route('users.store') }}" method="POST" class="space-y-3">
             @csrf
             <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none" placeholder="Full Name">
@@ -93,7 +93,7 @@
 
             <div class="space-y-6">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">👤 Add New Member</h3>
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">[USER] Add New Member</h3>
                     <form action="{{ route('users.store') }}" method="POST" class="space-y-4">
                         @csrf
                         <div class="space-y-4">

@@ -16,12 +16,12 @@
     <aside class="md:col-span-1">
       <div class="bg-white rounded-xl p-4 shadow">
         <nav class="space-y-2">
-          <a href="#" data-tab="profile" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>👤</span><span>Profile Info</span></a>
-          <a href="#" data-tab="notifications" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>🔔</span><span>Notifications</span></a>
-          <a href="#" data-tab="goals" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>🎯</span><span>Goals Management</span></a>
-          <a href="#" data-tab="security" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>🔒</span><span>Security</span></a>
-          <a href="#" data-tab="theme" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>🎨</span><span>Theme</span></a>
-          <a href="#" data-tab="subscription" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>💳</span><span>Subscription</span></a>
+          <a href="#" data-tab="profile" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>[USER]</span><span>Profile Info</span></a>
+          <a href="#" data-tab="notifications" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>[BELL]</span><span>Notifications</span></a>
+          <a href="#" data-tab="goals" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>[GOAL]</span><span>Goals Management</span></a>
+          <a href="#" data-tab="security" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>[LOCK]</span><span>Security</span></a>
+          <a href="#" data-tab="theme" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>[PALETTE]</span><span>Theme</span></a>
+          <a href="#" data-tab="subscription" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"> <span>[CARD]</span><span>Subscription</span></a>
         </nav>
       </div>
     </aside>

@@ -164,25 +164,25 @@
     <div class="goal-grid">
 
         <div class="goal-card">
-            🎓
+            [LEARN]
             <h3>Study Goals</h3>
             <p>Track exams and assignments.</p>
         </div>
 
         <div class="goal-card">
-            💪
+            [STRONG]
             <h3>Fitness Goals</h3>
             <p>Create healthy routines.</p>
         </div>
 
         <div class="goal-card">
-            💼
+            [WORK]
             <h3>Career Goals</h3>
             <p>Develop your professional skills.</p>
         </div>
 
         <div class="goal-card">
-            💰
+            [MONEY]
             <h3>Financial Goals</h3>
             <p>Manage saving targets.</p>
         </div>
@@ -252,21 +252,21 @@
     <div class="testimonial-grid">
 
         <div class="testimonial-card">
-            ⭐⭐⭐⭐⭐
+            [5 STARS]
             <p>
                 This platform helped me stay focused.
             </p>
         </div>
 
         <div class="testimonial-card">
-            ⭐⭐⭐⭐⭐
+            [5 STARS]
             <p>
                 My productivity increased significantly.
             </p>
         </div>
 
         <div class="testimonial-card">
-            ⭐⭐⭐⭐⭐
+            [5 STARS]
             <p>
                 Very easy and useful for daily goals.
             </p>

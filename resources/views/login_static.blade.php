@@ -27,7 +27,7 @@
         <a href="/landing" class="text-sm text-gray-600">Home</a>
       </div>
       <div class="flex flex-col items-center">
-        <div class="w-16 h-16 rounded-full bg-avocado flex items-center justify-center text-white text-2xl">👤</div>
+        <div class="w-16 h-16 rounded-full bg-avocado flex items-center justify-center text-white text-2xl">[USER]</div>
         <h2 class="mt-4 text-2xl font-bold">Login</h2>
       </div>
 

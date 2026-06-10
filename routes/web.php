@@ -54,6 +54,10 @@ Route::get('/landing', function () {
     return view('landing');
 })->name('landing');
 
+Route::get('/guide', function () {
+    return view('guide');
+})->name('guide');
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
@@ -124,10 +128,75 @@ Route::view('/login-static', 'login_static');
 
 // API Endpoint 1: Mengambil JSON data Goals
 Route::get('/api/goals', function() {
-    return response()->json(\App\Models\Goal::all());
+    $goals = \App\Models\Goal::all();
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Goals retrieved successfully 🎯',
+        'data' => $goals,
+        'count' => $goals->count(),
+        'emoji_info' => '🎯 Goal data from database'
+    ]);
 });
 
 // API Endpoint 2: Mengambil JSON data Users
 Route::get('/api/users', function() {
-    return response()->json(\App\Models\User::all());
+    $users = \App\Models\User::all();
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Users retrieved successfully 👥',
+        'data' => $users,
+        'count' => $users->count(),
+        'emoji_info' => '👥 User data from database'
+    ]);
+});
+
+// API Endpoint 3: Mengambil JSON data Habits
+Route::get('/api/habits', function() {
+    $habits = \App\Models\Habit::all();
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Habits retrieved successfully 🔥',
+        'data' => $habits,
+        'count' => $habits->count(),
+        'emoji_info' => '🔥 Habit tracking data from database'
+    ]);
+});
+
+// API Endpoint 4: Mengambil JSON data Tasks
+Route::get('/api/tasks', function() {
+    $tasks = \App\Models\Task::all();
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Tasks retrieved successfully 📋',
+        'data' => $tasks,
+        'count' => $tasks->count(),
+        'emoji_info' => '📋 Task management data from database'
+    ]);
+});
+
+// API Endpoint 5: Mengambil JSON data Categories
+Route::get('/api/categories', function() {
+    $categories = \App\Models\Category::all();
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Categories retrieved successfully 📂',
+        'data' => $categories,
+        'count' => $categories->count(),
+        'emoji_info' => '📂 Category data from database'
+    ]);
+});
+
+// API Endpoint 6: Dashboard Summary with emojis
+Route::get('/api/dashboard-summary', function() {
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Dashboard summary retrieved 📊',
+        'data' => [
+            'goals' => ['count' => \App\Models\Goal::count(), 'emoji' => '🎯'],
+            'habits' => ['count' => \App\Models\Habit::count(), 'emoji' => '🔥'],
+            'tasks' => ['count' => \App\Models\Task::count(), 'emoji' => '📋'],
+            'users' => ['count' => \App\Models\User::count(), 'emoji' => '👥']
+        ],
+        'emoji_info' => '📊 Complete dashboard summary with all metrics'
+    ]);
 });

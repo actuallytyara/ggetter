@@ -13,6 +13,7 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
         <li class="nav-item"><a class="nav-link" href="{{ route('home') ?? url('/') }}">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('guide') }}">Guide</a></li>
         @if(!session('user_email') && !request()->routeIs('login', 'register'))
           <li class="nav-item">
             <a class="btn btn-outline-success ms-2" href="{{ route('login') }}">Login</a>

@@ -14,6 +14,11 @@
     @include('partials.nav')
     <main class="py-4">
         <div class="container">
+            <div id="back-button-container" class="mb-3" style="display: none;">
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="window.history.back();">
+                    ← Back
+                </button>
+            </div>
         
         @if(session('success'))
             <div style="background-color: #d4edda; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
@@ -26,6 +31,14 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="" crossorigin="anonymous"></script>
     <script src="{{ asset('js/goals.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var backButtonContainer = document.getElementById('back-button-container');
+            if (window.history.length > 1) {
+                backButtonContainer.style.display = 'block';
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>
