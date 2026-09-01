@@ -126,8 +126,10 @@ Route::resource('tasks', TaskController::class)->except(['show']);
 Route::view('/dashboard-static', 'dashboard_static');
 Route::view('/login-static', 'login_static');
 
-// API Endpoint 1: Mengambil JSON data Goals
-Route::get('/api/goals', function() {
+// API GET global lama (diambil dari database)
+// Diset ulang (sebagian sebelumnya terhapus). Ini ambil dari DB.
+
+Route::get('/api/goals', function () {
     $goals = \App\Models\Goal::all();
     return response()->json([
         'status' => '✅ Success',
@@ -138,8 +140,7 @@ Route::get('/api/goals', function() {
     ]);
 });
 
-// API Endpoint 2: Mengambil JSON data Users
-Route::get('/api/users', function() {
+Route::get('/api/users', function () {
     $users = \App\Models\User::all();
     return response()->json([
         'status' => '✅ Success',
@@ -150,8 +151,7 @@ Route::get('/api/users', function() {
     ]);
 });
 
-// API Endpoint 3: Mengambil JSON data Habits
-Route::get('/api/habits', function() {
+Route::get('/api/habits', function () {
     $habits = \App\Models\Habit::all();
     return response()->json([
         'status' => '✅ Success',
@@ -162,8 +162,7 @@ Route::get('/api/habits', function() {
     ]);
 });
 
-// API Endpoint 4: Mengambil JSON data Tasks
-Route::get('/api/tasks', function() {
+Route::get('/api/tasks', function () {
     $tasks = \App\Models\Task::all();
     return response()->json([
         'status' => '✅ Success',
@@ -174,8 +173,7 @@ Route::get('/api/tasks', function() {
     ]);
 });
 
-// API Endpoint 5: Mengambil JSON data Categories
-Route::get('/api/categories', function() {
+Route::get('/api/categories', function () {
     $categories = \App\Models\Category::all();
     return response()->json([
         'status' => '✅ Success',
@@ -186,8 +184,7 @@ Route::get('/api/categories', function() {
     ]);
 });
 
-// API Endpoint 6: Dashboard Summary with emojis
-Route::get('/api/dashboard-summary', function() {
+Route::get('/api/dashboard-summary', function () {
     return response()->json([
         'status' => '✅ Success',
         'message' => 'Dashboard summary retrieved 📊',
@@ -200,3 +197,344 @@ Route::get('/api/dashboard-summary', function() {
         'emoji_info' => '📊 Complete dashboard summary with all metrics'
     ]);
 });
+
+
+
+
+
+// ==========================================
+// ==========================================
+// API CRUD (legacy session-based) - DINONAKTIFKAN
+// Pindah ke routes/api.php menggunakan Laravel Sanctum (Bearer Token)
+// ==========================================
+/*
+// Helper: pastikan user sudah login
+Route::post('/api/auth/ensure', function (Request $request) {
+    if (!$request->session()->has('user_id')) {
+        return response()->json([
+            'status' => '❌ Unauthorized',
+            'message' => 'Session user_id belum ada. Login dulu lewat /login.',
+            'data' => null
+        ], 401);
+    }
+
+    return response()->json([
+        'status' => '✅ Authorized',
+        'message' => 'Session valid',
+        'data' => ['user_id' => session('user_id')]
+    ]);
+});
+*/
+
+
+// ---------- TASKS CRUD ----------
+Route::get('/api/tasks/user', function () {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $tasks = \App\Models\Task::with(['goal', 'habit'])->where('user_id', session('user_id'))->orderBy('tanggal')->get();
+
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Tasks retrieved successfully 📋',
+        'data' => $tasks,
+        'count' => $tasks->count()
+    ]);
+});
+
+Route::post('/api/tasks', function (Request $request) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $request->validate([
+        'judul' => 'required|string|max:255',
+        'tanggal' => 'nullable|date',
+        'priority' => 'required|in:low,medium,high',
+        'status' => 'required|in:pending,completed',
+        'goal_id' => 'nullable|integer|exists:goals,id',
+        'habit_id' => 'nullable|integer|exists:habits,id',
+    ]);
+
+    // scope cek relasi milik user
+    $goalId = $request->input('goal_id');
+    $habitId = $request->input('habit_id');
+
+    if ($goalId) {
+        $goal = \App\Models\Goal::where('id', $goalId)->where('user_id', session('user_id'))->first();
+        if (!$goal) {
+            return response()->json(['status' => '❌ Forbidden', 'message' => 'goal_id tidak milik user login.', 'data' => null], 403);
+        }
+    }
+
+    if ($habitId) {
+        $habit = \App\Models\Habit::where('id', $habitId)->where('user_id', session('user_id'))->first();
+        if (!$habit) {
+            return response()->json(['status' => '❌ Forbidden', 'message' => 'habit_id tidak milik user login.', 'data' => null], 403);
+        }
+    }
+
+    $task = \App\Models\Task::create([
+        'goal_id' => $goalId,
+        'habit_id' => $habitId,
+        'judul' => $request->input('judul'),
+        'tanggal' => $request->input('tanggal'),
+        'priority' => $request->input('priority'),
+        'status' => $request->input('status'),
+        'user_id' => session('user_id'),
+    ]);
+
+    return response()->json([
+        'status' => '✅ Created',
+        'message' => 'Task created successfully. ',
+        'data' => $task,
+        'count' => 1
+    ], 201);
+});
+
+Route::put('/api/tasks/{id}', function (Request $request, $id) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $task = \App\Models\Task::where('id', $id)->where('user_id', session('user_id'))->first();
+    if (!$task) {
+        return response()->json(['status' => '❌ Not Found', 'message' => 'Task tidak ditemukan untuk user ini.', 'data' => null], 404);
+    }
+
+    $request->validate([
+        'judul' => 'sometimes|required|string|max:255',
+        'tanggal' => 'sometimes|nullable|date',
+        'priority' => 'sometimes|required|in:low,medium,high',
+        'status' => 'sometimes|required|in:pending,completed',
+        'goal_id' => 'sometimes|nullable|integer|exists:goals,id',
+        'habit_id' => 'sometimes|nullable|integer|exists:habits,id',
+    ]);
+
+    $goalId = $request->input('goal_id');
+    $habitId = $request->input('habit_id');
+
+    if ($goalId !== null && $goalId !== '') {
+        $goal = \App\Models\Goal::where('id', $goalId)->where('user_id', session('user_id'))->first();
+        if (!$goal) {
+            return response()->json(['status' => '❌ Forbidden', 'message' => 'goal_id tidak milik user login.', 'data' => null], 403);
+        }
+    }
+
+    if ($habitId !== null && $habitId !== '') {
+        $habit = \App\Models\Habit::where('id', $habitId)->where('user_id', session('user_id'))->first();
+        if (!$habit) {
+            return response()->json(['status' => '❌ Forbidden', 'message' => 'habit_id tidak milik user login.', 'data' => null], 403);
+        }
+    }
+
+    $task->update($request->only(['goal_id', 'habit_id', 'judul', 'tanggal', 'priority', 'status']));
+
+    return response()->json([
+        'status' => '✅ Updated',
+        'message' => 'Task updated successfully.',
+        'data' => $task,
+        'count' => 1
+    ]);
+});
+
+Route::delete('/api/tasks/{id}', function ($id, Request $request) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $task = \App\Models\Task::where('id', $id)->where('user_id', session('user_id'))->first();
+    if (!$task) {
+        return response()->json(['status' => '❌ Not Found', 'message' => 'Task tidak ditemukan untuk user ini.', 'data' => null], 404);
+    }
+
+    $task->delete();
+
+    return response()->json([
+        'status' => '✅ Deleted',
+        'message' => 'Task deleted successfully.',
+        'data' => null,
+        'count' => 1
+    ]);
+});
+
+// ---------- GOALS CRUD ----------
+Route::get('/api/goals/user', function () {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $goals = \App\Models\Goal::where('user_id', session('user_id'))->get();
+
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Goals retrieved successfully 🎯',
+        'data' => $goals,
+        'count' => $goals->count()
+    ]);
+});
+
+Route::post('/api/goals', function (Request $request) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'category' => 'required|string|max:255',
+        'description' => 'nullable|string|max:1000',
+        'progress' => 'required|integer|min:0|max:100',
+    ]);
+
+    $goal = \App\Models\Goal::create([
+        'title' => $request->input('title'),
+        'category' => $request->input('category'),
+        'description' => $request->input('description'),
+        'progress' => $request->input('progress'),
+        'user_id' => session('user_id'),
+    ]);
+
+    return response()->json([
+        'status' => '✅ Created',
+        'message' => 'Goal created successfully.',
+        'data' => $goal,
+        'count' => 1
+    ], 201);
+});
+
+Route::put('/api/goals/{id}', function (Request $request, $id) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $goal = \App\Models\Goal::where('id', $id)->where('user_id', session('user_id'))->first();
+    if (!$goal) {
+        return response()->json(['status' => '❌ Not Found', 'message' => 'Goal tidak ditemukan untuk user ini.', 'data' => null], 404);
+    }
+
+    $request->validate([
+        'title' => 'sometimes|required|string|max:255',
+        'category' => 'sometimes|required|string|max:255',
+        'description' => 'sometimes|nullable|string|max:1000',
+        'progress' => 'sometimes|required|integer|min:0|max:100',
+    ]);
+
+    $goal->update($request->only(['title', 'category', 'description', 'progress']));
+
+    return response()->json([
+        'status' => '✅ Updated',
+        'message' => 'Goal updated successfully.',
+        'data' => $goal,
+        'count' => 1
+    ]);
+});
+
+Route::delete('/api/goals/{id}', function ($id) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $goal = \App\Models\Goal::where('id', $id)->where('user_id', session('user_id'))->first();
+    if (!$goal) {
+        return response()->json(['status' => '❌ Not Found', 'message' => 'Goal tidak ditemukan untuk user ini.', 'data' => null], 404);
+    }
+
+    $goal->delete();
+
+    return response()->json([
+        'status' => '✅ Deleted',
+        'message' => 'Goal deleted successfully.',
+        'data' => null,
+        'count' => 1
+    ]);
+});
+
+// ---------- HABITS CRUD ----------
+Route::get('/api/habits/user', function () {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $habits = \App\Models\Habit::where('user_id', session('user_id'))->orderBy('nama')->get();
+
+    return response()->json([
+        'status' => '✅ Success',
+        'message' => 'Habits retrieved successfully 🔥',
+        'data' => $habits,
+        'count' => $habits->count()
+    ]);
+});
+
+Route::post('/api/habits', function (Request $request) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'frekuensi' => 'required|in:daily,weekly,monthly',
+        'status' => 'required|in:active,inactive',
+    ]);
+
+    $habit = \App\Models\Habit::create([
+        'nama' => $request->input('nama'),
+        'frekuensi' => $request->input('frekuensi'),
+        'status' => $request->input('status'),
+        'user_id' => session('user_id'),
+    ]);
+
+    return response()->json([
+        'status' => '✅ Created',
+        'message' => 'Habit created successfully.',
+        'data' => $habit,
+        'count' => 1
+    ], 201);
+});
+
+Route::put('/api/habits/{id}', function (Request $request, $id) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $habit = \App\Models\Habit::where('id', $id)->where('user_id', session('user_id'))->first();
+    if (!$habit) {
+        return response()->json(['status' => '❌ Not Found', 'message' => 'Habit tidak ditemukan untuk user ini.', 'data' => null], 404);
+    }
+
+    $request->validate([
+        'nama' => 'sometimes|required|string|max:255',
+        'frekuensi' => 'sometimes|required|in:daily,weekly,monthly',
+        'status' => 'sometimes|required|in:active,inactive',
+    ]);
+
+    $habit->update($request->only(['nama', 'frekuensi', 'status']));
+
+    return response()->json([
+        'status' => '✅ Updated',
+        'message' => 'Habit updated successfully.',
+        'data' => $habit,
+        'count' => 1
+    ]);
+});
+
+Route::delete('/api/habits/{id}', function ($id) {
+    if (!session('user_id')) {
+        return response()->json(['status' => '❌ Unauthorized', 'message' => 'Login dulu (session user_id tidak ada).', 'data' => null], 401);
+    }
+
+    $habit = \App\Models\Habit::where('id', $id)->where('user_id', session('user_id'))->first();
+    if (!$habit) {
+        return response()->json(['status' => '❌ Not Found', 'message' => 'Habit tidak ditemukan untuk user ini.', 'data' => null], 404);
+    }
+
+    $habit->delete();
+
+    return response()->json([
+        'status' => '✅ Deleted',
+        'message' => 'Habit deleted successfully.',
+        'data' => null,
+        'count' => 1
+    ]);
+});
+

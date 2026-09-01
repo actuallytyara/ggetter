@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "user_id": 1,
+    "nama": "Baca 30 menit",
+    "frekuensi": "daily",
+    "status": "active"
+  }
+]

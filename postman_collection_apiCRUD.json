@@ -1,0 +1,204 @@
+{
+  "info": {
+    "name": "ggetter - API CRUD (Tasks/Goals/Habits)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Ensure Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/ensure",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "ensure"]
+        },
+        "body": { "mode": "raw", "raw": "{}" }
+      }
+    },
+    {
+      "name": "GET Tasks (user)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks/user",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "user"]
+        }
+      }
+    },
+    {
+      "name": "POST Task",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"judul\": \"Tulis rencana belajar\",\n  \"tanggal\": \"2026-06-10\",\n  \"priority\": \"medium\",\n  \"status\": \"pending\",\n  \"goal_id\": 1,\n  \"habit_id\": 1\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT Task",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "{{taskId}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"completed\",\n  \"priority\": \"high\"\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE Task",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "{{taskId}}"]
+        }
+      }
+    },
+    {
+      "name": "GET Goals (user)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/goals/user",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "goals", "user"]
+        }
+      }
+    },
+    {
+      "name": "POST Goal",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/goals",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "goals"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Naik level karier\",\n  \"category\": \"Career\",\n  \"description\": \"Belajar dan improve skills\",\n  \"progress\": 10\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT Goal",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/goals/{{goalId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "goals", "{{goalId}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"progress\": 25,\n  \"description\": \"Update progres\"\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE Goal",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/goals/{{goalId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "goals", "{{goalId}}"]
+        }
+      }
+    },
+    {
+      "name": "GET Habits (user)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/habits/user",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "habits", "user"]
+        }
+      }
+    },
+    {
+      "name": "POST Habit",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/habits",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "habits"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nama\": \"Baca 30 menit\",\n  \"frekuensi\": \"daily\",\n  \"status\": \"active\"\n}"
+        }
+      }
+    },
+    {
+      "name": "PUT Habit",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/habits/{{habitId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "habits", "{{habitId}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"inactive\"\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE Habit",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/habits/{{habitId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "habits", "{{habitId}}"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000" },
+    { "key": "taskId", "value": "1" },
+    { "key": "goalId", "value": "1" },
+    { "key": "habitId", "value": "1" }
+  ]
+}
+
